@@ -8,6 +8,12 @@
     <Description>This is a core set librarlies for CMS service.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/7thdata/cms-services</PackageProjectUrl>
+    <Version>1.1.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIcon>13077731.png</PackageIcon>
+    <RepositoryUrl>https://github.com/7thdata/services-cms-lib</RepositoryUrl>
+    <PackageTags>CMS</PackageTags>
+    <PackageReleaseNotes>New methods: delete physical, and logical of article is added.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +28,10 @@
     <None Update="README.md">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>README.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\..\..\OneDrive - 7TH DATA INC\Images\13077731.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
     </None>
   </ItemGroup>
 
