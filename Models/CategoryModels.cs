@@ -41,5 +41,6 @@ namespace wppSeventh.Services.Cms.Models
         public string ChannelPermaName { get; set; }
         public string Culture { get; set; }
         public int Count { get; set; }
+        public List<ArticleSubCategoryViewModel> SubCategories { get; set; }
     }
 }

@@ -36,7 +36,9 @@ namespace wppSeventh.Services.Cms.Services
                 join ch in _db.Channels on c.ChannelId equals ch.Id
                 join a in _db.Articles on c.Id equals a.CategoryId into g
 
-                where c.OwnerId == ownerId && ch.PermaName == channelPermaName
+                where c.OwnerId == ownerId && ch.PermaName == channelPermaName && c.IsDeleted == false
+                
+                orderby c.DisplayOrder
 
                 select new ArticleCategoryViewModel()
                 {
@@ -55,7 +57,32 @@ namespace wppSeventh.Services.Cms.Services
                     Name = c.Name,
                     OwnerId = c.OwnerId,
                     PermaName = c.PermaName,
-                    Title = c.Title
+                    Title = c.Title,
+                    SubCategories = (from sc in _db.SubCategories.AsEnumerable()
+                                     where sc.CategoryId == c.Id && sc.IsDeleted == false
+                                     orderby sc.DisplayOrder
+                                     select new ArticleSubCategoryViewModel()
+                                     {
+                                         CategoryId = sc.CategoryId,
+                                         CategoryName = c.Name,
+                                         CategoryPermaName = c.PermaName,
+                                         ChannelId = ch.Id,
+                                         ChannelName = ch.Name,
+                                         ChannelPermaName = ch.PermaName,
+                                         Count = g.Select(g => g.Culture == culture && g.SubCategoryId == sc.Id).Count(),
+                                         Created = sc.Created,
+                                         Culture = culture,
+                                         Description = sc.Description,
+                                         DisplayOrder = sc.DisplayOrder,
+                                         Id = sc.Id,
+                                         IsDeleted = sc.IsDeleted,
+                                         IsPublished = sc.IsPublished,
+                                         Modified = sc.Modified,
+                                         Name = sc.Name,
+                                         OwnerId = sc.OwnerId,
+                                         PermaName = sc.PermaName,
+                                         Title = sc.Title
+                                     }).ToList()
                 };
 
             if (!string.IsNullOrEmpty(keyword))
@@ -105,7 +132,10 @@ namespace wppSeventh.Services.Cms.Services
                 join ch in _db.Channels on c.ChannelId equals ch.Id
                 join a in _db.Articles on c.Id equals a.CategoryId into g
 
-                where c.OwnerId == ownerId && ch.Id == channelId
+                where
+                c.OwnerId == ownerId && ch.Id == channelId && c.IsDeleted == false
+
+                orderby c.DisplayOrder
 
                 select new ArticleCategoryViewModel()
                 {
@@ -124,7 +154,32 @@ namespace wppSeventh.Services.Cms.Services
                     Name = c.Name,
                     OwnerId = c.OwnerId,
                     PermaName = c.PermaName,
-                    Title = c.Title
+                    Title = c.Title,
+                    SubCategories = (from sc in _db.SubCategories.AsEnumerable()
+                                     where sc.CategoryId == c.Id && sc.IsDeleted == false
+                                     orderby sc.DisplayOrder
+                                     select new ArticleSubCategoryViewModel()
+                                     {
+                                         CategoryId = sc.CategoryId,
+                                         CategoryName = c.Name,
+                                         CategoryPermaName = c.PermaName,
+                                         ChannelId = ch.Id,
+                                         ChannelName = ch.Name,
+                                         ChannelPermaName = ch.PermaName,
+                                         Count = g.Select(g => g.Culture == culture && g.SubCategoryId == sc.Id).Count(),
+                                         Created = sc.Created,
+                                         Culture = culture,
+                                         Description = sc.Description,
+                                         DisplayOrder = sc.DisplayOrder,
+                                         Id = sc.Id,
+                                         IsDeleted = sc.IsDeleted,
+                                         IsPublished = sc.IsPublished,
+                                         Modified = sc.Modified,
+                                         Name = sc.Name,
+                                         OwnerId = sc.OwnerId,
+                                         PermaName = sc.PermaName,
+                                         Title = sc.Title
+                                     }).ToList()
                 };
 
             if (!string.IsNullOrEmpty(keyword))
@@ -178,6 +233,8 @@ namespace wppSeventh.Services.Cms.Services
                 ca.IsDeleted == false &&
                 ch.PermaName == channelPermaName
 
+                orderby ca.DisplayOrder
+
                 select new ArticleCategoryViewModel()
                 {
                     ChannelId = ca.ChannelId,
@@ -195,7 +252,32 @@ namespace wppSeventh.Services.Cms.Services
                     Name = ca.Name,
                     OwnerId = ca.OwnerId,
                     PermaName = ca.PermaName,
-                    Title = ca.Title
+                    Title = ca.Title,
+                    SubCategories = (from sc in _db.SubCategories.AsEnumerable()
+                                     where sc.CategoryId == ca.Id && sc.IsDeleted == false
+                                     orderby sc.DisplayOrder
+                                     select new ArticleSubCategoryViewModel()
+                                     {
+                                         CategoryId = sc.CategoryId,
+                                         CategoryName = ca.Name,
+                                         CategoryPermaName = ca.PermaName,
+                                         ChannelId = ch.Id,
+                                         ChannelName = ch.Name,
+                                         ChannelPermaName = ch.PermaName,
+                                         Count = g.Select(g => g.Culture == culture && g.SubCategoryId == sc.Id).Count(),
+                                         Created = sc.Created,
+                                         Culture = culture,
+                                         Description = sc.Description,
+                                         DisplayOrder = sc.DisplayOrder,
+                                         Id = sc.Id,
+                                         IsDeleted = sc.IsDeleted,
+                                         IsPublished = sc.IsPublished,
+                                         Modified = sc.Modified,
+                                         Name = sc.Name,
+                                         OwnerId = sc.OwnerId,
+                                         PermaName = sc.PermaName,
+                                         Title = sc.Title
+                                     }).ToList()
                 }
 
                 ).FirstOrDefault();
@@ -223,6 +305,8 @@ namespace wppSeventh.Services.Cms.Services
                  ca.PermaName == permaName &&
                  ch.PermaName == channelPermaName
 
+                 orderby ca.DisplayOrder
+
                  select new ArticleCategoryViewModel()
                  {
                      ChannelId = ca.ChannelId,
@@ -240,7 +324,32 @@ namespace wppSeventh.Services.Cms.Services
                      Name = ca.Name,
                      OwnerId = ca.OwnerId,
                      PermaName = ca.PermaName,
-                     Title = ca.Title
+                     Title = ca.Title,
+                     SubCategories = (from sc in _db.SubCategories.AsEnumerable()
+                                      where sc.CategoryId == ca.Id && sc.IsDeleted == false
+                                      orderby sc.DisplayOrder
+                                      select new ArticleSubCategoryViewModel()
+                                      {
+                                          CategoryId = sc.CategoryId,
+                                          CategoryName = ca.Name,
+                                          CategoryPermaName = ca.PermaName,
+                                          ChannelId = ch.Id,
+                                          ChannelName = ch.Name,
+                                          ChannelPermaName = ch.PermaName,
+                                          Count = g.Select(g => g.Culture == culture && g.SubCategoryId == sc.Id).Count(),
+                                          Created = sc.Created,
+                                          Culture = culture,
+                                          Description = sc.Description,
+                                          DisplayOrder = sc.DisplayOrder,
+                                          Id = sc.Id,
+                                          IsDeleted = sc.IsDeleted,
+                                          IsPublished = sc.IsPublished,
+                                          Modified = sc.Modified,
+                                          Name = sc.Name,
+                                          OwnerId = sc.OwnerId,
+                                          PermaName = sc.PermaName,
+                                          Title = sc.Title
+                                      }).ToList()
                  }
 
                  ).FirstOrDefault();
@@ -286,7 +395,32 @@ namespace wppSeventh.Services.Cms.Services
                     Name = ca.Name,
                     OwnerId = ca.OwnerId,
                     PermaName = ca.PermaName,
-                    Title = ca.Title
+                    Title = ca.Title,
+                    SubCategories = (from sc in _db.SubCategories.AsEnumerable()
+                                     where sc.CategoryId == ca.Id && sc.IsDeleted == false
+                                     orderby sc.DisplayOrder
+                                     select new ArticleSubCategoryViewModel()
+                                     {
+                                         CategoryId = sc.CategoryId,
+                                         CategoryName = ca.Name,
+                                         CategoryPermaName = ca.PermaName,
+                                         ChannelId = ch.Id,
+                                         ChannelName = ch.Name,
+                                         ChannelPermaName = ch.PermaName,
+                                         Count = g.Select(g => g.Culture == culture && g.SubCategoryId == sc.Id).Count(),
+                                         Created = sc.Created,
+                                         Culture = culture,
+                                         Description = sc.Description,
+                                         DisplayOrder = sc.DisplayOrder,
+                                         Id = sc.Id,
+                                         IsDeleted = sc.IsDeleted,
+                                         IsPublished = sc.IsPublished,
+                                         Modified = sc.Modified,
+                                         Name = sc.Name,
+                                         OwnerId = sc.OwnerId,
+                                         PermaName = sc.PermaName,
+                                         Title = sc.Title
+                                     }).ToList()
                 }
 
                 ).FirstOrDefault();
@@ -331,7 +465,32 @@ namespace wppSeventh.Services.Cms.Services
                     Name = ca.Name,
                     OwnerId = ca.OwnerId,
                     PermaName = ca.PermaName,
-                    Title = ca.Title
+                    Title = ca.Title,
+                    SubCategories = (from sc in _db.SubCategories.AsEnumerable()
+                                     where sc.CategoryId == ca.Id && sc.IsDeleted == false
+                                     orderby sc.DisplayOrder
+                                     select new ArticleSubCategoryViewModel()
+                                     {
+                                         CategoryId = sc.CategoryId,
+                                         CategoryName = ca.Name,
+                                         CategoryPermaName = ca.PermaName,
+                                         ChannelId = ch.Id,
+                                         ChannelName = ch.Name,
+                                         ChannelPermaName = ch.PermaName,
+                                         Count = g.Select(g => g.Culture == culture && g.SubCategoryId == sc.Id).Count(),
+                                         Created = sc.Created,
+                                         Culture = culture,
+                                         Description = sc.Description,
+                                         DisplayOrder = sc.DisplayOrder,
+                                         Id = sc.Id,
+                                         IsDeleted = sc.IsDeleted,
+                                         IsPublished = sc.IsPublished,
+                                         Modified = sc.Modified,
+                                         Name = sc.Name,
+                                         OwnerId = sc.OwnerId,
+                                         PermaName = sc.PermaName,
+                                         Title = sc.Title
+                                     }).ToList()
                 }
 
                 ).FirstOrDefault();
@@ -372,12 +531,16 @@ namespace wppSeventh.Services.Cms.Services
                 if (original == null)
                 {
                     // Insert
+                    item.Created = DateTime.Now;
+                    item.Modified = DateTime.Now;
 
                     // Make sure perma name is unique.
                     if (IsUniqueArticleCategoryPermaName(item.PermaName, item.OwnerId, item.ChannelId))
                     {
                         try
                         {
+                           
+
                             _db.Categories.Add(item);
                             await _db.SaveChangesAsync();
                         }
@@ -404,6 +567,8 @@ namespace wppSeventh.Services.Cms.Services
                 }
                 else
                 {
+                    item.Modified = DateTime.Now;
+
                     // Upsert
                     if (item.PermaName != original.PermaName)
                     {

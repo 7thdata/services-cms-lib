@@ -16,8 +16,9 @@ namespace wppSeventh.Services.Cms.Models
         public string Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        [Required]
+        
         public string Text { get; set; }
+        public string MarkdownText { get; set; }
         public string Url { get; set; }
         public DateTime Publish { get; set; }
         public long PublishUnixtime { get; set; }

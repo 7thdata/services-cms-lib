@@ -41,7 +41,7 @@ namespace wppSeventh.Services.Cms.Services
                 where
                 c.OwnerId == ownerId &&
                 ch.PermaName == channelPermaName &&
-                ca.PermaName == categoryPermaName
+                ca.PermaName == categoryPermaName && ca.IsDeleted == false
 
                 select new ArticleSubCategoryViewModel()
                 {
@@ -119,7 +119,7 @@ namespace wppSeventh.Services.Cms.Services
                 where
                 c.OwnerId == ownerId &&
                 ch.Id == channelId &&
-                ca.Id == categoryId
+                ca.Id == categoryId && c.IsDeleted == false
 
                 select new ArticleSubCategoryViewModel()
                 {
@@ -432,6 +432,8 @@ namespace wppSeventh.Services.Cms.Services
                 if (original == null)
                 {
                     // Insert
+                    item.Created = DateTime.Now;
+                    item.Modified = DateTime.Now;
 
                     // Make sure perma name is unique.
                     if (IsUniqueArticleSubCategoryPermaName(item.PermaName, item.OwnerId, item.ChannelId, item.CategoryId))
@@ -465,6 +467,8 @@ namespace wppSeventh.Services.Cms.Services
                 else
                 {
                     // Upsert
+                    item.Modified = DateTime.Now;
+
                     // Make sure perma name is unique.
                     if (item.PermaName != original.PermaName)
                     {

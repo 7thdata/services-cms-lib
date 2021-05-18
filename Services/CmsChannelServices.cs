@@ -9,7 +9,7 @@ using wppSeventh.Services.Cms.Data;
 using wppSeventh.Services.Cms.Models;
 using wppSeventh.Services.Cms.Services.Interfaces;
 
-namespace wppSeventh.Services.Cms
+namespace wppSeventh.Services.Cms.Services
 {
     public class CmsChannelServices : ICmsChannelServices
     {
@@ -39,7 +39,7 @@ namespace wppSeventh.Services.Cms
             var items =
                 from c in _db.Channels.AsEnumerable()
                 join a in _db.Articles on c.Id equals a.ChannelId into g
-                where c.OwnerId == ownerId
+                where c.OwnerId == ownerId && c.IsDeleted == false
 
                 select new ArticleChannelViewModel()
                 {
@@ -268,6 +268,8 @@ namespace wppSeventh.Services.Cms
                 if (original == null)
                 {
                     // Insert
+                    item.Created = DateTime.Now;
+                    item.Modified = DateTime.Now;
 
                     // Make sure perma name is unique.
                     if (IsUniqueArticleChannelPermaName(item.PermaName, item.OwnerId))
@@ -303,6 +305,8 @@ namespace wppSeventh.Services.Cms
                 else
                 {
                     // Upsert
+                    item.Modified = DateTime.Now;
+
                     // Make sure perma name is unique (if perma name is changed)
                     if (item.PermaName != original.PermaName)
                     {

@@ -34,7 +34,7 @@ namespace wppSeventh.Services.Cms.Services
                 from au in _db.Author.AsEnumerable()
                 join ar in _db.Articles on au.Id equals ar.AuthorId into g
 
-                where au.OwnerId == ownerId
+                where au.OwnerId == ownerId && au.IsDeleted == false
 
                 select new AuthorViewModel()
                 {
@@ -182,6 +182,9 @@ namespace wppSeventh.Services.Cms.Services
 
                 if (original == null)
                 {
+                    item.Created = DateTime.Now;
+                    item.Modified = DateTime.Now;
+
                     // Insert
                     if (IsUniqueAuthorPermaName(item.PermaName, item.OwnerId))
                     {
@@ -216,6 +219,8 @@ namespace wppSeventh.Services.Cms.Services
                 else
                 {
                     // Upsert
+                    item.Modified = DateTime.Now;
+
                     // Make sure perma name is unique.
                     if (item.PermaName != original.PermaName)
                     {

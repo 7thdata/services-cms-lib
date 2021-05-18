@@ -102,6 +102,7 @@ namespace wppSeventh.Services.Cms.Services
                             SubCategoryPermaName = sc.PermaName,
                             Tags = a.Tags,
                             Text = a.Text,
+                            MarkdownText = a.MarkdownText,
                             Title = a.Title,
                             Url = a.Url
                         };
@@ -269,6 +270,7 @@ namespace wppSeventh.Services.Cms.Services
                             SubCategoryPermaName = sc.PermaName,
                             Tags = a.Tags,
                             Text = a.Text,
+                            MarkdownText = a.MarkdownText,
                             Title = a.Title,
                             Url = a.Url
                         };
@@ -399,7 +401,8 @@ namespace wppSeventh.Services.Cms.Services
                         a.PermaName == permaName &&
                         ch.PermaName == channelPermaName &&
                         ca.PermaName == categoryPermaName &&
-                        sc.PermaName == subCategoryPermaName
+                        sc.PermaName == subCategoryPermaName && 
+                        a.IsDeleted == false
 
                         select new ArticleViewModel()
                         {
@@ -429,6 +432,7 @@ namespace wppSeventh.Services.Cms.Services
                             SubCategoryPermaName = sc.PermaName,
                             Tags = a.Tags,
                             Text = a.Text,
+                            MarkdownText = a.MarkdownText,
                             Title = a.Title,
                             Url = a.Url
                         };
@@ -457,7 +461,7 @@ namespace wppSeventh.Services.Cms.Services
 
                         where
                         a.OwnerId == ownerId &&
-                        a.Id == id
+                        a.Id == id && a.IsDeleted == false
 
                         select new ArticleViewModel()
                         {
@@ -487,6 +491,7 @@ namespace wppSeventh.Services.Cms.Services
                             SubCategoryPermaName = sc.PermaName,
                             Tags = a.Tags,
                             Text = a.Text,
+                            MarkdownText = a.MarkdownText,
                             Title = a.Title,
                             Url = a.Url
                         };
@@ -569,7 +574,7 @@ namespace wppSeventh.Services.Cms.Services
                     // Insert
 
                     // Make sure perma name is unique.
-                    if (IsUniqueArticlePermaName(item.OwnerId, item.PermaName, item.Culture))
+                    if (IsUniqueArticlePermaName(item.OwnerId, item.ChannelId, item.CategoryId, item.SubCategoryId, item.PermaName, item.Culture))
                     {
                         try
                         {
@@ -609,7 +614,7 @@ namespace wppSeventh.Services.Cms.Services
                     // Make sure perma name is unique.
                     if (item.PermaName != original.PermaName)
                     {
-                        if (IsUniqueArticlePermaName(item.PermaName, item.OwnerId, item.Culture))
+                        if (IsUniqueArticlePermaName(item.PermaName, item.ChannelId, item.CategoryId, item.SubCategoryId, item.OwnerId, item.Culture))
                         {
                             try
                             {
@@ -721,9 +726,22 @@ namespace wppSeventh.Services.Cms.Services
         /// <param name="permaName"></param>
         /// <param name="culture"></param>
         /// <returns></returns>
-        private bool IsUniqueArticlePermaName(string ownerId, string permaName, string culture)
+        private bool IsUniqueArticlePermaName(
+            string ownerId, 
+            string channelId, 
+            string categoryId, 
+            string subCategoryId, 
+            string permaName, 
+            string culture)
         {
-            var articleWithPermaName = (from p in _db.Articles where p.PermaName == permaName && p.OwnerId == ownerId && p.Culture == culture select p).FirstOrDefault();
+            var articleWithPermaName = (from p in _db.Articles 
+                                        where 
+                                        p.PermaName == permaName && 
+                                        p.OwnerId == ownerId && 
+                                        p.ChannelId == channelId &&
+                                        p.CategoryId == categoryId &&
+                                        p.SubCategoryId == subCategoryId &&
+                                        p.Culture == culture select p).FirstOrDefault();
 
             if (articleWithPermaName == null)
             {
